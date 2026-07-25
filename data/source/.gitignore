@@ -1,0 +1,36 @@
+# Environnement Python
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Variables d'environnement
+.env
+
+# Logs
+logs/
+*.log
+
+# Fichiers temporaires
+tmp/
+temp/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Données sensibles ou volumineuses
+data/raw/
+data/clean/
+data/curated/
+data/quarantine/
+
+# Modèles
+models/saved/
