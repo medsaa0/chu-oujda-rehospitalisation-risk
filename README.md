@@ -1407,11 +1407,11 @@ docker compose up -d
 Pour le moment, seul le dataset a été choisi.
 
 ```text
-Étape 1 — Analyse du besoin métier ⬜
+Étape 1 — Analyse du besoin métier ✅
         ↓
-Étape 2 — Étude du dataset ⬜
+Étape 2 — Étude du dataset ✅
         ↓
-Étape 3 — Architecture Data Engineering ⬜
+Étape 3 — Architecture Data Engineering ⏳
         ↓
 Étape 4 — Initialisation du projet ⬜
         ↓
