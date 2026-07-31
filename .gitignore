@@ -1,0 +1,56 @@
+﻿# Environnements Python
+.venv/
+venv/
+env/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Configuration secrète
+.env
+
+# Logs
+*.log
+logs/*
+!logs/.gitkeep
+
+# Données générées
+data/landing/*
+!data/landing/.gitkeep
+
+data/raw/*
+!data/raw/.gitkeep
+
+data/clean/*
+!data/clean/.gitkeep
+
+data/curated/*
+!data/curated/.gitkeep
+
+data/quarantine/*
+!data/quarantine/.gitkeep
+
+# Modèles générés
+ml/models/*
+!ml/models/.gitkeep
+
+# Power BI
+*.pbix
+
+# Tests
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# VS Code
+.vscode/
+
+# Windows et macOS
+Thumbs.db
+.DS_Store
