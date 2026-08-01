@@ -1,0 +1,2 @@
+rule_name,column_name,rejection_reason,violation_count
+invalid_category,gender,La valeur ne fait pas partie des catégories autorisées.,3

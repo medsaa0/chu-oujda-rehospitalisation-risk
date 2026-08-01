@@ -1,0 +1,324 @@
+{
+  "generated_at": "2026-08-01T09:34:33.111675+00:00",
+  "raw_file": "C:\\Users\\pc\\chu-oujda-rehospitalisation-risk\\data\\raw\\diabetic_data_0689e7ec0312.parquet",
+  "summary": {
+    "total_rows": 101766,
+    "valid_rows": 101763,
+    "rejected_rows": 3,
+    "total_violations": 3,
+    "duplicate_rows": 0,
+    "valid_rate_percent": 99.9971
+  },
+  "column_types": {
+    "encounter_id": "String",
+    "patient_nbr": "String",
+    "race": "String",
+    "gender": "String",
+    "age": "String",
+    "weight": "String",
+    "admission_type_id": "String",
+    "discharge_disposition_id": "String",
+    "admission_source_id": "String",
+    "time_in_hospital": "String",
+    "payer_code": "String",
+    "medical_specialty": "String",
+    "num_lab_procedures": "String",
+    "num_procedures": "String",
+    "num_medications": "String",
+    "number_outpatient": "String",
+    "number_emergency": "String",
+    "number_inpatient": "String",
+    "diag_1": "String",
+    "diag_2": "String",
+    "diag_3": "String",
+    "number_diagnoses": "String",
+    "max_glu_serum": "String",
+    "A1Cresult": "String",
+    "metformin": "String",
+    "repaglinide": "String",
+    "nateglinide": "String",
+    "chlorpropamide": "String",
+    "glimepiride": "String",
+    "acetohexamide": "String",
+    "glipizide": "String",
+    "glyburide": "String",
+    "tolbutamide": "String",
+    "pioglitazone": "String",
+    "rosiglitazone": "String",
+    "acarbose": "String",
+    "miglitol": "String",
+    "troglitazone": "String",
+    "tolazamide": "String",
+    "examide": "String",
+    "citoglipton": "String",
+    "insulin": "String",
+    "glyburide-metformin": "String",
+    "glipizide-metformin": "String",
+    "glimepiride-pioglitazone": "String",
+    "metformin-rosiglitazone": "String",
+    "metformin-pioglitazone": "String",
+    "change": "String",
+    "diabetesMed": "String",
+    "readmitted": "String"
+  },
+  "violations": [
+    {
+      "rule_name": "invalid_category",
+      "column_name": "gender",
+      "rejection_reason": "La valeur ne fait pas partie des catégories autorisées.",
+      "violation_count": 3
+    }
+  ],
+  "missing_values": [
+    {
+      "column_name": "weight",
+      "missing_count": 98569,
+      "missing_rate_percent": 96.8585
+    },
+    {
+      "column_name": "medical_specialty",
+      "missing_count": 49949,
+      "missing_rate_percent": 49.0822
+    },
+    {
+      "column_name": "payer_code",
+      "missing_count": 40256,
+      "missing_rate_percent": 39.5574
+    },
+    {
+      "column_name": "race",
+      "missing_count": 2273,
+      "missing_rate_percent": 2.2336
+    },
+    {
+      "column_name": "diag_3",
+      "missing_count": 1423,
+      "missing_rate_percent": 1.3983
+    },
+    {
+      "column_name": "diag_2",
+      "missing_count": 358,
+      "missing_rate_percent": 0.3518
+    },
+    {
+      "column_name": "diag_1",
+      "missing_count": 21,
+      "missing_rate_percent": 0.0206
+    },
+    {
+      "column_name": "encounter_id",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "patient_nbr",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "gender",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "age",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "admission_type_id",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "discharge_disposition_id",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "admission_source_id",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "time_in_hospital",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "num_lab_procedures",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "num_procedures",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "num_medications",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "number_outpatient",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "number_emergency",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "number_inpatient",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "number_diagnoses",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "max_glu_serum",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "A1Cresult",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "metformin",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "repaglinide",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "nateglinide",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "chlorpropamide",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "glimepiride",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "acetohexamide",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "glipizide",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "glyburide",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "tolbutamide",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "pioglitazone",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "rosiglitazone",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "acarbose",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "miglitol",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "troglitazone",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "tolazamide",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "examide",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "citoglipton",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "insulin",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "glyburide-metformin",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "glipizide-metformin",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "glimepiride-pioglitazone",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "metformin-rosiglitazone",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "metformin-pioglitazone",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "change",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "diabetesMed",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    },
+    {
+      "column_name": "readmitted",
+      "missing_count": 0,
+      "missing_rate_percent": 0.0
+    }
+  ]
+}

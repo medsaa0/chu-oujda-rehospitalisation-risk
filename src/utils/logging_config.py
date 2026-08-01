@@ -5,7 +5,7 @@ from src.utils.paths import LOGS_DIR
 
 
 def get_logger(name: str) -> logging.Logger:
-    """Créer un logger affiché dans le terminal et enregistré dans un fichier."""
+    """Créer un logger terminal et fichier."""
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
     logger = logging.getLogger(name)
@@ -23,8 +23,10 @@ def get_logger(name: str) -> logging.Logger:
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
 
+    log_filename = f"{name.replace('.', '_')}.log"
+
     file_handler = RotatingFileHandler(
-        LOGS_DIR / "ingestion.log",
+        LOGS_DIR / log_filename,
         maxBytes=5_000_000,
         backupCount=3,
         encoding="utf-8",
