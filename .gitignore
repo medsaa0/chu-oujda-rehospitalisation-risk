@@ -42,6 +42,10 @@ data/quarantine/*
 ml/models/*
 !ml/models/.gitkeep
 
+# Suivi MLflow local
+mlruns/
+mlartifacts/
+
 # Power BI
 *.pbix
 

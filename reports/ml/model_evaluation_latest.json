@@ -1,0 +1,89 @@
+{
+  "generated_at": "2026-08-13T11:17:15.710845+00:00",
+  "training_rows": 79472,
+  "test_rows": 19868,
+  "positive_rate": 0.1139,
+  "best_model": "xgboost",
+  "best_model_path": "C:\\Users\\DELL\\chu-oujda-rehospitalisation-risk\\ml\\models\\best_model.joblib",
+  "results": {
+    "logistic_regression": {
+      "precision": 0.1754,
+      "recall": 0.536,
+      "sensitivity": 0.536,
+      "specificity": 0.6761,
+      "f1_score": 0.2643,
+      "roc_auc": 0.6546,
+      "pr_auc": 0.1978,
+      "confusion_matrix": {
+        "true_negative": 11903,
+        "false_positive": 5702,
+        "false_negative": 1050,
+        "true_positive": 1213
+      }
+    },
+    "random_forest": {
+      "precision": 0.1812,
+      "recall": 0.5365,
+      "sensitivity": 0.5365,
+      "specificity": 0.6884,
+      "f1_score": 0.2709,
+      "roc_auc": 0.6624,
+      "pr_auc": 0.2111,
+      "confusion_matrix": {
+        "true_negative": 12119,
+        "false_positive": 5486,
+        "false_negative": 1049,
+        "true_positive": 1214
+      }
+    },
+    "xgboost": {
+      "precision": 0.178,
+      "recall": 0.5621,
+      "sensitivity": 0.5621,
+      "specificity": 0.6662,
+      "f1_score": 0.2703,
+      "roc_auc": 0.6635,
+      "pr_auc": 0.2166,
+      "confusion_matrix": {
+        "true_negative": 11729,
+        "false_positive": 5876,
+        "false_negative": 991,
+        "true_positive": 1272
+      }
+    }
+  },
+  "numeric_features": [
+    "time_in_hospital",
+    "num_lab_procedures",
+    "num_procedures",
+    "num_medications",
+    "number_diagnoses",
+    "age_midpoint",
+    "total_previous_visits",
+    "healthcare_utilization_score",
+    "patient_complexity_score",
+    "active_medications_count",
+    "medication_dosage_changes_count"
+  ],
+  "categorical_features": [
+    "gender",
+    "race",
+    "admission_type_id",
+    "discharge_disposition_id",
+    "admission_source_id",
+    "max_glu_serum",
+    "a1c_result",
+    "change",
+    "diabetesmed",
+    "insulin_prescribed",
+    "diag_1_group"
+  ],
+  "excluded_discharge_disposition_ids": [
+    11,
+    13,
+    14,
+    19,
+    20,
+    21
+  ]
+}
