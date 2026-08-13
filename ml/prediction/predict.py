@@ -30,6 +30,9 @@ BEST_MODEL_PATH = MODELS_DIR / "best_model.joblib"
 MODEL_EVALUATION_REPORT_PATH = (
     ROOT_DIR / "reports" / "ml" / "model_evaluation_latest.json"
 )
+PREDICTION_REPORT_PATH = (
+    ROOT_DIR / "reports" / "ml" / "prediction_report_latest.json"
+)
 
 MEDIUM_RISK_QUANTILE = 0.80
 HIGH_RISK_QUANTILE = 0.95
@@ -213,6 +216,20 @@ def run_predictions() -> dict[str, Any]:
         result["model_name"],
         result["scored_rows"],
         result["risk_distribution"],
+    )
+
+    PREDICTION_REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    PREDICTION_REPORT_PATH.write_text(
+        json.dumps(
+            {
+                **result,
+                "generated_at": datetime.now(timezone.utc).isoformat(),
+            },
+            ensure_ascii=False,
+            indent=2,
+            default=str,
+        ),
+        encoding="utf-8",
     )
 
     return result

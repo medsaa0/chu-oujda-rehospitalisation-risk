@@ -1,0 +1,14 @@
+{
+  "status": "SUCCESS",
+  "model_name": "xgboost",
+  "scored_rows": 99340,
+  "postgres_row_count": 99340,
+  "medium_risk_threshold": 0.5701,
+  "high_risk_threshold": 0.6898,
+  "risk_distribution": {
+    "Low": 79472,
+    "Medium": 14901,
+    "High": 4967
+  },
+  "generated_at": "2026-08-13T11:23:20.125007+00:00"
+}
