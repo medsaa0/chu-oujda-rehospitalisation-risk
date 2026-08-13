@@ -1,4 +1,4 @@
-﻿services:
+services:
   postgres:
     image: postgres:16-alpine
     container_name: chu_readmission_postgres
@@ -25,6 +25,65 @@
       timeout: 5s
       retries: 5
 
+  api:
+    build: .
+    container_name: chu_readmission_api
+    restart: unless-stopped
+
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-readmission_user}:${POSTGRES_PASSWORD:-readmission_password}@postgres:5432/${POSTGRES_DB:-readmission_dw}
+
+    ports:
+      - "${API_PORT:-8000}:8000"
+
+    volumes:
+      - ./ml/models:/app/ml/models
+      - ./reports:/app/reports
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  pipeline:
+    build: .
+    container_name: chu_readmission_pipeline
+    profiles: ["pipeline"]
+    command:
+      [
+        "python", "-m",
+        "orchestration.prefect_flows.pipeline_flow"
+      ]
+
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-readmission_user}:${POSTGRES_PASSWORD:-readmission_password}@postgres:5432/${POSTGRES_DB:-readmission_dw}
+
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./reports:/app/reports
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  mlflow:
+    build: .
+    container_name: chu_readmission_mlflow
+    profiles: ["monitoring"]
+    restart: unless-stopped
+    command:
+      [
+        "mlflow", "server",
+        "--host", "0.0.0.0",
+        "--port", "5000",
+        "--backend-store-uri", "file:///app/mlruns"
+      ]
+
+    ports:
+      - "${MLFLOW_PORT:-5000}:5000"
+
+    volumes:
+      - ./mlruns:/app/mlruns
+
 volumes:
   postgres_data:
-
