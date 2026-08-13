@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-01T09:34:33.111675+00:00",
-  "raw_file": "C:\\Users\\pc\\chu-oujda-rehospitalisation-risk\\data\\raw\\diabetic_data_0689e7ec0312.parquet",
+  "generated_at": "2026-08-13T10:45:08.695629+00:00",
+  "raw_file": "C:\\Users\\DELL\\chu-oujda-rehospitalisation-risk\\data\\raw\\diabetic_data_0689e7ec0312.parquet",
   "summary": {
     "total_rows": 101766,
     "valid_rows": 101763,

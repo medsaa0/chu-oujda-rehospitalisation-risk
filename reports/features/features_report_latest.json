@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T10:33:36.686580+00:00",
+  "generated_at": "2026-08-13T10:47:48.503944+00:00",
   "status": "SUCCESS",
   "target_schema": "staging",
   "target_table": "hospital_encounters_features",

@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-02T09:07:47.449476+00:00",
+  "generated_at": "2026-08-13T10:47:05.737686+00:00",
   "run_id": 2,
   "status": "SUCCESS",
-  "source_clean_path": "C:\\Users\\pc\\chu-oujda-rehospitalisation-risk\\data\\clean\\diabetic_data_0689e7ec0312_validated.parquet",
-  "curated_path": "C:\\Users\\pc\\chu-oujda-rehospitalisation-risk\\data\\curated\\diabetic_data_0689e7ec0312_curated.parquet",
+  "source_clean_path": "C:\\Users\\DELL\\chu-oujda-rehospitalisation-risk\\data\\clean\\diabetic_data_0689e7ec0312_validated.parquet",
+  "curated_path": "C:\\Users\\DELL\\chu-oujda-rehospitalisation-risk\\data\\curated\\diabetic_data_0689e7ec0312_curated.parquet",
   "target_schema": "staging",
   "target_table": "hospital_encounters_curated",
   "input_rows": 101763,
@@ -16,5 +16,5 @@
   "duckdb_row_count": 101763,
   "duckdb_distinct_encounter_count": 101763,
   "postgres_row_count": 101763,
-  "report_path": "C:\\Users\\pc\\chu-oujda-rehospitalisation-risk\\reports\\etl\\etl_report_latest.json"
+  "report_path": "C:\\Users\\DELL\\chu-oujda-rehospitalisation-risk\\reports\\etl\\etl_report_latest.json"
 }

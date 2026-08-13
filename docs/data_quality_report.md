@@ -3,7 +3,7 @@
 ## Informations générales
 
 - Fichier contrôlé : `diabetic_data_0689e7ec0312.parquet`
-- Date du contrôle : `2026-08-01T09:34:33.111675+00:00`
+- Date du contrôle : `2026-08-13T10:45:08.695629+00:00`
 - Nombre total de lignes : **101766**
 - Lignes valides : **101763**
 - Lignes rejetées : **3**
@@ -15,11 +15,11 @@
 
 Les lignes valides sont enregistrées dans :
 
-`C:\Users\pc\chu-oujda-rehospitalisation-risk\data\clean\diabetic_data_0689e7ec0312_validated.parquet`
+`C:\Users\DELL\chu-oujda-rehospitalisation-risk\data\clean\diabetic_data_0689e7ec0312_validated.parquet`
 
 Les lignes rejetées sont enregistrées dans :
 
-`C:\Users\pc\chu-oujda-rehospitalisation-risk\data\quarantine\diabetic_data_0689e7ec0312_rejected.parquet`
+`C:\Users\DELL\chu-oujda-rehospitalisation-risk\data\quarantine\diabetic_data_0689e7ec0312_rejected.parquet`
 
 ## Violations détectées
 
