@@ -124,8 +124,16 @@ def create_curated_indexes(
     engine: Engine,
     target_schema: str,
     target_table: str,
+    extra_index_columns: tuple[str, ...] = ("readmitted",),
 ) -> None:
-    """Créer les index nécessaires sur la table Curated."""
+    """
+    Créer les index nécessaires sur une table chargée depuis Polars.
+
+    Toutes les tables reçoivent un index unique sur encounter_id et un
+    index sur patient_nbr. extra_index_columns permet d'ajouter des
+    index specifiques a une table (ex. readmitted pour le Curated,
+    readmitted_30_days pour les Features).
+    """
     validate_identifier(target_schema)
     validate_identifier(target_table)
 
@@ -137,16 +145,8 @@ def create_curated_indexes(
         f"ix_{target_table}_patient_nbr"
     )
 
-    readmitted_index = (
-        f"ix_{target_table}_readmitted"
-    )
-
-    for index_name in (
-        encounter_index,
-        patient_index,
-        readmitted_index,
-    ):
-        validate_identifier(index_name)
+    validate_identifier(encounter_index)
+    validate_identifier(patient_index)
 
     statements = [
         f"""
@@ -157,14 +157,26 @@ def create_curated_indexes(
         CREATE INDEX IF NOT EXISTS "{patient_index}"
         ON "{target_schema}"."{target_table}" ("patient_nbr")
         """,
-        f"""
-        CREATE INDEX IF NOT EXISTS "{readmitted_index}"
-        ON "{target_schema}"."{target_table}" ("readmitted")
-        """,
+    ]
+
+    for column_name in extra_index_columns:
+        validate_identifier(column_name)
+
+        extra_index = f"ix_{target_table}_{column_name}"
+        validate_identifier(extra_index)
+
+        statements.append(
+            f"""
+            CREATE INDEX IF NOT EXISTS "{extra_index}"
+            ON "{target_schema}"."{target_table}" ("{column_name}")
+            """
+        )
+
+    statements.append(
         f"""
         ANALYZE "{target_schema}"."{target_table}"
-        """,
-    ]
+        """
+    )
 
     with engine.begin() as connection:
         for statement in statements:
@@ -178,6 +190,7 @@ def load_dataframe_to_postgres(
     engine: Engine,
     target_schema: str = DEFAULT_TARGET_SCHEMA,
     target_table: str = DEFAULT_TARGET_TABLE,
+    extra_index_columns: tuple[str, ...] = ("readmitted",),
 ) -> int:
     """
     Charger le DataFrame Curated dans PostgreSQL.
@@ -218,6 +231,7 @@ def load_dataframe_to_postgres(
         engine=engine,
         target_schema=target_schema,
         target_table=target_table,
+        extra_index_columns=extra_index_columns,
     )
 
     postgres_row_count = get_postgres_row_count(

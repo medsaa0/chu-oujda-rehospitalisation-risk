@@ -32,6 +32,9 @@ data/clean/*
 data/curated/*
 !data/curated/.gitkeep
 
+data/features/*
+!data/features/.gitkeep
+
 data/quarantine/*
 !data/quarantine/.gitkeep
 

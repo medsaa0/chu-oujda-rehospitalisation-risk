@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-08-13T10:33:36.686580+00:00",
+  "status": "SUCCESS",
+  "target_schema": "staging",
+  "target_table": "hospital_encounters_features",
+  "input_rows": 101763,
+  "output_rows": 101763,
+  "output_columns": 16,
+  "readmitted_30_days_rate": 0.1116,
+  "frequent_patient_rate": 0.1566,
+  "insulin_prescribed_rate": 0.5344,
+  "source_curated_path": "C:\\Users\\DELL\\chu-oujda-rehospitalisation-risk\\data\\curated\\diabetic_data_0689e7ec0312_curated.parquet",
+  "features_path": "C:\\Users\\DELL\\chu-oujda-rehospitalisation-risk\\data\\features\\diabetic_data_0689e7ec0312_features.parquet",
+  "features_version": "1.0.0",
+  "postgres_row_count": 101763
+}

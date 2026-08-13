@@ -9,6 +9,7 @@ LANDING_DIR = DATA_DIR / "landing"
 RAW_DIR = DATA_DIR / "raw"
 CLEAN_DIR = DATA_DIR / "clean"
 CURATED_DIR = DATA_DIR / "curated"
+FEATURES_DIR = DATA_DIR / "features"
 QUARANTINE_DIR = DATA_DIR / "quarantine"
 
 LOGS_DIR = ROOT_DIR / "logs"
@@ -22,6 +23,7 @@ REQUIRED_DIRECTORIES = [
     RAW_DIR,
     CLEAN_DIR,
     CURATED_DIR,
+    FEATURES_DIR,
     QUARANTINE_DIR,
     LOGS_DIR,
     WAREHOUSE_DIR,
