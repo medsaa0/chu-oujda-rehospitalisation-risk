@@ -1404,57 +1404,87 @@ docker compose up -d
 
 # État actuel du projet
 
-Pour le moment, seul le dataset a été choisi.
-
 ```text
 Étape 1 — Analyse du besoin métier ✅
         ↓
 Étape 2 — Étude du dataset ✅
         ↓
-Étape 3 — Architecture Data Engineering ⏳
+Étape 3 — Architecture Data Engineering ✅
         ↓
-Étape 4 — Initialisation du projet ⬜
+Étape 4 — Initialisation du projet ✅
         ↓
-Étape 5 — Ingestion des données ⬜
+Étape 5 — Ingestion des données ✅
         ↓
-Étape 6 — Contrôle qualité ⬜
+Étape 6 — Contrôle qualité ✅
         ↓
-Étape 7 — Pipeline ETL ⬜
+Étape 7 — Pipeline ETL ✅
         ↓
-Étape 8 — Feature Engineering ⬜
+Étape 8 — Feature Engineering ✅
         ↓
-Étape 9 — Data Warehouse ⬜
+Étape 9 — Data Warehouse ✅
         ↓
-Étape 10 — Data Marts ⬜
+Étape 10 — Data Marts ✅
         ↓
-Étape 11 — Orchestration Prefect ⬜
+Étape 11 — Orchestration Prefect ✅
         ↓
-Étape 12 — Analyse exploratoire avancée ⬜
+Étape 12 — Analyse exploratoire avancée ✅
         ↓
-Étape 13 — KPIs métier ⬜
+Étape 13 — KPIs métier ✅
         ↓
-Étape 14 — Modèle Power BI ⬜
+Étape 14 — Modèle Power BI ✅ (guide détaillé fourni, construction manuelle dans Power BI Desktop)
         ↓
-Étape 15 — Dashboards Power BI ⬜
+Étape 15 — Dashboards Power BI ✅ (guide détaillé fourni, construction manuelle dans Power BI Desktop)
         ↓
-Étape 16 — Optimisation Power BI ⬜
+Étape 16 — Optimisation Power BI ✅ (guide fourni)
         ↓
-Étape 17 — Machine Learning ⬜
+Étape 17 — Machine Learning ✅
         ↓
-Étape 18 — API FastAPI ⬜
+Étape 18 — API FastAPI ✅
         ↓
-Étape 19 — Dockerisation ⬜
+Étape 19 — Dockerisation ✅
         ↓
-Étape 20 — Tests et documentation ⬜
+Étape 20 — Tests et documentation ✅
 ```
 
-La prochaine étape est :
+## Résumé de ce qui est construit
 
-```text
-Étape 1 — Analyse du besoin métier
-```
+- **Pipeline de données** (`src/`, `orchestration/`) : ingestion,
+  contrôle qualité, ETL, Feature Engineering, chargement PostgreSQL,
+  entièrement orchestré par un flow Prefect
+  (`orchestration/prefect_flows/pipeline_flow.py`).
+- **Data Warehouse** (`warehouse/`) : modèle en étoile PostgreSQL
+  (schéma `warehouse`), 7 Data Marts (schéma `marts`) prêts pour la BI.
+- **Modèle prédictif** (`ml/`) : comparaison Logistic
+  Regression / Random Forest / XGBoost, suivi MLflow, scoring vers
+  `warehouse.fact_prediction`.
+- **API** (`api/`) : FastAPI exposant KPIs, Data Marts et prédictions
+  (`/docs` pour la documentation interactive).
+- **Conteneurisation** (`Dockerfile`, `docker-compose.yml`) : services
+  `postgres`, `api`, `pipeline`, `mlflow`.
+- **Power BI** (`powerbi/documentation/`) : le modèle, les mesures DAX
+  et les 7 dashboards sont documentés en détail (référence
+  `powerbi_model.md` + guide pas-à-pas
+  `guide_powerbi_desktop.md`/`.pdf`), à construire manuellement dans
+  Power BI Desktop (application graphique non pilotable depuis ce dépôt).
+- **Tests** (`tests/`) : unitaires, intégration (base réelle) et
+  qualité des données — voir `pytest` (62+ tests).
+- **Documentation** : technique (`docs/technical_documentation/`),
+  fonctionnelle et KPIs (`docs/business/`), architecture
+  (`docs/architecture/`).
 
-Il ne faut pas commencer directement par le Machine Learning ou Power BI. Le projet doit d’abord construire une base de données fiable, un pipeline reproductible et un Data Warehouse correctement modélisé.
+## Limites connues du projet
+
+- Les probabilités du modèle prédictif ne sont pas calibrées (seuils de
+  risque par quantile plutôt que par probabilité absolue, voir
+  `docs/technical_documentation/ml_model.md`).
+- `dim_date` est une table calendrier technique, non reliée aux faits
+  (le dataset ne contient pas de date d'hospitalisation réelle).
+- Les attributs de `dim_patient` (âge, sexe, race) reflètent la première
+  hospitalisation connue du patient (simplification Type 1).
+- Aucun KPI financier réel : le dataset ne contient pas de coût.
+- Power BI Desktop étant une application graphique Windows, les
+  dashboards eux-mêmes doivent être construits manuellement en suivant
+  `powerbi/documentation/guide_powerbi_desktop.pdf`.
 
 ---
 
