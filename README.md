@@ -32,7 +32,176 @@ API et déploiement
 
 ---
 
+# Guide détaillé du projet
+
+Cette section explique **ce qui a été construit concrètement** et
+**comment le faire tourner de A à Z**. La section suivante
+(« Roadmap du projet ») est le plan pédagogique initial, conservé tel
+quel comme référence phase par phase.
+
+## 1. Le problème métier, en clair
+
+Quand un patient diabétique est hospitalisé, l'objectif est qu'il
+reparte guéri et n'ait pas besoin de revenir. Mais dans les faits,
+**environ 11 patients sur 100** doivent retourner à l'hôpital **dans le
+mois qui suit leur sortie** (réhospitalisation à moins de 30 jours).
+C'est souvent le signe que quelque chose s'est mal passé (traitement
+incomplet, sortie trop rapide, manque de suivi) et ça coûte cher au
+système de santé.
+
+Le rôle de cette plateforme est de :
+
+1. rassembler et fiabiliser les données d'hospitalisation ;
+2. mesurer ce taux de réhospitalisation et les facteurs qui y sont liés ;
+3. le rendre visible dans des tableaux de bord pour les équipes
+   hospitalières ;
+4. **prédire, dès l'admission, le risque qu'un patient revienne** afin
+   de pouvoir lui porter une attention particulière avant sa sortie.
+
+## 2. Le dataset
+
+**Diabetes 130-US Hospitals for Years 1999–2008** (dataset public,
+`data/source/diabetic_data.csv`) : 101 766 hospitalisations de patients
+diabétiques dans des hôpitaux américains, avec pour chaque séjour la
+démographie du patient, les diagnostics, les médicaments prescrits, la
+durée du séjour, et le statut de réhospitalisation (`readmitted`).
+`data/source/IDS_mapping.csv` donne le libellé des codes d'admission et
+de sortie.
+
+## 3. Le pipeline de données, couche par couche
+
+Chaque couche lit la précédente et ne modifie jamais les données
+d'origine — on peut toujours remonter à la source.
+
+| Couche | Dossier / Table | Ce qu'elle fait concrètement |
+|---|---|---|
+| **Landing** | `data/landing/` | Copie brute du CSV, telle que reçue, jamais modifiée (traçabilité). |
+| **Raw** | `data/raw/` | Le CSV converti en Parquet, sans transformation. |
+| **Ingestion** | `src/ingestion/ingest_csv.py` | Calcule une empreinte (SHA-256) du fichier pour ne jamais l'importer deux fois, copie vers Landing/Raw, journalise l'import dans PostgreSQL. |
+| **Clean** | `data/clean/`, `data/quarantine/` | Chaque ligne est contrôlée (types, valeurs manquantes, catégories valides, cohérence métier). Les lignes valides vont en `clean/`, les invalides en `quarantine/` avec le motif du rejet. |
+| **Curated** | `data/curated/`, `staging.hospital_encounters_curated` | Données nettoyées, typées, dédupliquées, colonnes renommées pour PostgreSQL, chargées en base. |
+| **Features** | `data/features/`, `staging.hospital_encounters_features` | Variables calculées : cible `readmitted_30_days`, regroupement des diagnostics par famille clinique, score de complexité du patient, usage d'insuline, etc. (détail : `docs/data_dictionary_features.md`). |
+| **Data Warehouse** | schéma `warehouse` PostgreSQL | Modèle en étoile : dimensions (`dim_patient`, `dim_diagnosis`, `dim_medication`, `dim_admission_*`, `dim_date`) et faits (`fact_hospitalization`, `fact_readmission`, `fact_medication_usage`, `fact_prediction`). Détail : `docs/architecture/data_warehouse_model.md`. |
+| **Data Marts** | schéma `marts` PostgreSQL | 7 vues prêtes pour la BI (patients, hospitalisations, réhospitalisation, diagnostics, médicaments, qualité). Détail : `docs/architecture/data_marts.md`. |
+
+Toutes ces étapes sont enchaînées automatiquement par un **flow
+Prefect** (`orchestration/prefect_flows/pipeline_flow.py`), avec relance
+automatique en cas d'échec — voir
+`docs/technical_documentation/orchestration.md`.
+
+## 4. Le modèle prédictif (Machine Learning)
+
+`ml/training/train_models.py` compare trois modèles (Logistic
+Regression, Random Forest, XGBoost) pour prédire
+`readmitted_30_days`. Le meilleur modèle (XGBoost, ROC-AUC ≈ 0,66,
+cohérent avec la littérature publiée sur ce dataset) est sauvegardé,
+puis `ml/prediction/predict.py` score toutes les hospitalisations et
+écrit un niveau de risque (`Low` / `Medium` / `High`) dans
+`warehouse.fact_prediction`. Détail, limites et vérification de la
+valeur prédictive : `docs/technical_documentation/ml_model.md`.
+
+## 5. L'API
+
+`api/app/main.py` (FastAPI) expose les KPIs, les Data Marts et le
+modèle prédictif via HTTP — `GET /health`, `/api/kpis`, `/api/patients`,
+`/api/hospitalizations`, `/api/readmissions`, `/api/data-quality`,
+`/api/pipeline-runs`, `POST /api/predict`. Documentation interactive sur
+`/docs` une fois lancée. Détail : `docs/technical_documentation/api.md`.
+
+## 6. Power BI
+
+Power BI Desktop est une application graphique Windows qui ne peut pas
+être pilotée depuis ce dépôt. Ce qui est livré à la place, prêt à
+l'emploi :
+
+- le modèle SQL (`warehouse.dim_*` / `fact_*`, vues `marts.*`) ;
+- `powerbi/documentation/powerbi_model.md` : relations, cardinalités,
+  dictionnaire de mesures DAX, sécurité RLS ;
+- `powerbi/documentation/guide_powerbi_desktop.pdf` (et `.md`) : guide
+  **pas-à-pas, clic par clic**, pour construire le modèle et les 7
+  dashboards dans Power BI Desktop.
+
+## 7. Comment lancer le projet de A à Z
+
+```bash
+# 1. Environnement Python (3.13 recommandé)
+python -m venv .venv
+.venv/Scripts/activate           # ou source .venv/bin/activate sous Linux/Mac
+pip install -r requirements.txt
+
+# 2. Variables d'environnement
+cp .env.example .env
+
+# 3. Base de données PostgreSQL
+docker compose up -d postgres
+
+# 4. Pipeline complet (ingestion -> ... -> Data Marts)
+python -m orchestration.prefect_flows.pipeline_flow
+
+# 5. Modèle prédictif
+python -m ml.training.train_models
+python -m ml.prediction.predict
+
+# 6. API (en local)
+uvicorn api.app.main:app --reload
+# -> http://127.0.0.1:8000/docs
+
+# 7. Ou tout en conteneurs (API + Postgres)
+docker compose up -d
+# Pipeline en conteneur, a la demande :
+docker compose --profile pipeline run --rm pipeline
+# Interface MLflow (suivi des entrainements) :
+docker compose --profile monitoring up -d mlflow
+# -> http://127.0.0.1:5000
+
+# 8. Tests
+pytest
+```
+
+## 8. Structure du dépôt
+
+```text
+api/            API FastAPI (Etape 18)
+data/           Landing / Raw / Clean / Curated / Features / Quarantine (générées, non versionnées sauf source/)
+docs/           Documentation technique, fonctionnelle et architecture
+ml/             Entrainement, évaluation et scoring du modèle (Etape 17)
+notebooks/      Exploration et analyse (Etapes 2, 6, 12)
+orchestration/  Flow Prefect (Etape 11)
+powerbi/        Documentation et guide PDF Power BI (Etapes 14-16)
+reports/        Rapports générés (qualité, ETL, features, ML) — suivis en historique
+src/            Pipeline de données : ingestion, validation, transformation, loading, features, warehouse
+tests/          Tests unitaires, d'intégration et de qualité des données
+warehouse/      Scripts SQL (DDL) des dimensions, faits et Data Marts
+Dockerfile, docker-compose.yml   Conteneurisation (Etape 19)
+```
+
+## 9. Documentation complémentaire
+
+| Sujet | Fichier |
+|---|---|
+| Besoin métier, périmètre, règles de gestion, utilisateurs | `docs/business/` |
+| Catalogue des KPIs (avec formules) | `docs/business/kpis.md` |
+| Interprétation des dashboards | `docs/business/guide_utilisation_dashboards.md` |
+| Architecture Data Engineering | `docs/architecture/data_engineering_architecture.md` |
+| Modèle du Data Warehouse | `docs/architecture/data_warehouse_model.md` |
+| Data Marts | `docs/architecture/data_marts.md` |
+| Dictionnaire des données brutes | `docs/data_dictionary.md` |
+| Dictionnaire des variables dérivées | `docs/data_dictionary_features.md` |
+| Pipeline ETL | `docs/technical_documentation/etl_pipeline.md` |
+| Orchestration Prefect | `docs/technical_documentation/orchestration.md` |
+| Modèle prédictif | `docs/technical_documentation/ml_model.md` |
+| API | `docs/technical_documentation/api.md` |
+| Docker | `docs/technical_documentation/docker.md` |
+| Power BI (référence) | `powerbi/documentation/powerbi_model.md` |
+| Power BI (guide pas-à-pas, PDF) | `powerbi/documentation/guide_powerbi_desktop.pdf` |
+
+---
+
 # Roadmap du projet
+
+*(Plan pédagogique initial du projet, phase par phase — conservé comme
+référence ; l'état d'avancement réel est décrit ci-dessus et dans la
+section « État actuel du projet » plus bas.)*
 
 ## Phase 1 — Compréhension métier
 
